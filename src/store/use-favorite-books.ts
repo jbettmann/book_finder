@@ -5,7 +5,7 @@ import type { Book } from "@/types/book";
 
 interface FavoriteBooksState {
   favorites: Book[];
-  addFavorite: (book: Book) => void;
+  addFavorite: (book: Book) => { error?: string } | void;
   removeFavorite: (bookId: string) => void;
   updateFavorite: (updatedBook: Partial<Book> & { key: string }) => void;
   clearFavorites: () => void;

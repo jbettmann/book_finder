@@ -3,7 +3,7 @@ import { DataTableSearch } from "@/components/ui/table/data-table-search";
 import { ReusableTableWrapper } from "@/components/ui/table/reusable-table-wrapper";
 import { useFavoriteBooks } from "@/store/use-favorite-books";
 import type { Book } from "@/types/book";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { BookList } from "../books-list-table";
 
 import {
@@ -18,13 +18,13 @@ import { useSort } from "@/store/use-sort";
 export default function BookTableContainer() {
   const [searchTerm, setSearchTerm] = useState("");
   // const [sortOption, setSortOption] = useState("date-desc");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<null | string>(null);
   const { sort, setSort } = useSort();
   const { addFavorite, favorites, clearFavorites } = useFavoriteBooks();
 
   const handleAddBook = (book: Book) => {
     const addBook = addFavorite(book);
-    if (addBook.error) {
+    if (addBook && addBook.error) {
       setError(addBook.error);
     }
   };
