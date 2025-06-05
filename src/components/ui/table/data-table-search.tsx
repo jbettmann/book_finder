@@ -36,7 +36,7 @@ export function DataTableSearch({
   useEffect(() => {
     const timeout = setTimeout(() => {
       setSearchQuery(inputValue);
-      setIsOpen(inputValue.length > 1); 
+      setIsOpen(inputValue.length > 1);
     }, 300);
 
     return () => clearTimeout(timeout);
@@ -58,6 +58,7 @@ export function DataTableSearch({
             onChange={(e) => setInputValue(e.target.value)}
             className={cn("w-full md:max-w-sm")}
           />
+
           {inputValue && (
             <button
               aria-label="Clear input"
@@ -72,7 +73,7 @@ export function DataTableSearch({
 
       <PopoverContent className="w-full max-w-sm p-0">
         {loading ? (
-          <Loader2 className="animate-spin text-muted-foreground"/>
+          <Loader2 className="animate-spin text-muted-foreground" />
         ) : results.length === 0 ? (
           <div className="p-4 text-sm text-muted-foreground w-full">
             No results found.
@@ -80,7 +81,10 @@ export function DataTableSearch({
         ) : (
           <ul className="max-h-80 overflow-auto divide-y divide-muted border-t w-full">
             {results.map((book) => (
-              <li key={book.key} className="flex items-center justify-between p-3">
+              <li
+                key={book.key}
+                className="flex items-center justify-between p-3"
+              >
                 <div className="flex flex-col">
                   <span className="font-medium">{book.title}</span>
                   <span className="text-xs text-muted-foreground">

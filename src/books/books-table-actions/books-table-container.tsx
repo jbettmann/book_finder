@@ -3,7 +3,7 @@ import { DataTableSearch } from "@/components/ui/table/data-table-search";
 import { ReusableTableWrapper } from "@/components/ui/table/reusable-table-wrapper";
 import { useFavoriteBooks } from "@/store/use-favorite-books";
 import type { Book } from "@/types/book";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BookList } from "../books-list-table";
 
 import {
@@ -13,21 +13,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSort } from "@/store/use-sort";
 
 export default function BookTableContainer() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOption, setSortOption] = useState("date-desc");
-
+  // const [sortOption, setSortOption] = useState("date-desc");
+  const [error, setError] = useState(null);
+  const { sort, setSort } = useSort();
   const { addFavorite, favorites, clearFavorites } = useFavoriteBooks();
 
   const handleAddBook = (book: Book) => {
-    addFavorite(book);
+    const addBook = addFavorite(book);
+    if (addBook.error) {
+      setError(addBook.error);
+    }
   };
 
   const sortedFavorites = useMemo(() => {
     const copy = [...favorites];
 
-    switch (sortOption) {
+    switch (sort) {
       case "date-asc":
         return copy; // original order
       case "date-desc":
@@ -39,8 +44,9 @@ export default function BookTableContainer() {
       default:
         return copy;
     }
-  }, [favorites, sortOption]);
+  }, [favorites, sort]);
 
+  console.log(sort);
   return (
     <ReusableTableWrapper
       isTableView={true}
@@ -54,19 +60,14 @@ export default function BookTableContainer() {
             setSearchQuery={setSearchTerm}
             onAdd={handleAddBook}
           />
-
-          
+          {error && <p className="text-red-500">{error}</p>}
 
           {favorites.length > 0 && (
-            <Button
-              variant="outline"
-             
-              onClick={clearFavorites}
-            >
+            <Button variant="outline" onClick={clearFavorites}>
               Clear Favorites
             </Button>
           )}
-          <Select value={sortOption} onValueChange={setSortOption} >
+          <Select value={sort} onValueChange={setSort}>
             <SelectTrigger className="w-[180px] ml-auto">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
@@ -86,7 +87,6 @@ export default function BookTableContainer() {
             author_name: book.author_name || [],
           }))}
           totalItems={sortedFavorites.length}
-        
         />
       }
     />

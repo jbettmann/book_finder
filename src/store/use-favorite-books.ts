@@ -22,6 +22,8 @@ export const useFavoriteBooks = create<FavoriteBooksState>()(
           set((state) => ({
             favorites: [...state.favorites, book],
           }));
+        } else {
+          return { error: "Book already exist in list" };
         }
       },
 
